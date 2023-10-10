@@ -25,6 +25,18 @@ export default function Single(){
     id: null,
     choice: ''
   });
+
+  // Function to redirect user if screen width > 450px
+  const redirectToURLIfScreenWidthIsGreaterThan450 = () => {
+    if (window.innerWidth > 450) {
+      window.location.href = 'https://rock-paper-scissors-challenge-phi.vercel.app/';
+    }
+  };
+
+  // Use useEffect to call the redirection function
+  useEffect(() => {
+    redirectToURLIfScreenWidthIsGreaterThan450();
+  }, []); // Empty dependency array ensures this runs once after component mounts
   // Function to initialize players
   const initializePlayers = () => {
     const username1 = prompt("Player 1, please enter your username:");
