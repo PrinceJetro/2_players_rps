@@ -7,12 +7,13 @@ import scissors from  "./images/icon-scissors.png"
 import rock from  "./images/icon-rock.png"
 
 import songUrl from './song.mp3'
+import cheers from './cheers.mp3'
 
 
 export default function Single(){
 
   const [score1,setScore1] = useState(0);
-  
+  const  [winner, setWinner] = useState("")
   const [score2,setScore2] = useState(0);
   const [win,setWin] = useState("NO WINNER YET");
   const [firstPlayer, setFirstPlayer] = useState({
@@ -58,7 +59,13 @@ export default function Single(){
     const id2 = Math.floor(Math.random() * 101);
     setSecondPlayer({ username: username2, id: id2, choice: 'second' });
     alert(`${username2}, your id is ${id2}`);
-    song();
+    new Audio(songUrl).play()
+        .then(() => {
+      console.log('Audio started playing.');
+  })
+  .catch(error => {
+      console.error('Error playing audio:', error);
+  });
 
     document.getElementById("badge").style.display="flex"
     document.getElementById("game-div").style.display="flex"
@@ -167,19 +174,44 @@ export default function Single(){
       document.getElementById("winner-mobile").style.display="none"
       document.getElementById("game-div").style.display="flex"
       document.getElementById("checkwinner").style.display="block"
-
     }
-    const audio = new Audio(songUrl);
-    function song() {
-      audio.play()
-          .then(() => {
-              console.log('Audio started playing.');
+
+  useEffect(() => {
+    if(score1 == 2){
+      new Audio(cheers).play()
+                .then(() => {
+              console.log('Someone won.');
           })
           .catch(error => {
               console.error('Error playing audio:', error);
           });
-  };
-  
+      document.getElementById("badge").style.display="none";
+      document.getElementById("game-div").style.display="none";
+      document.getElementById("outcome_mobile").style.display="none";
+      document.getElementById("checkwinner").style.display="none";
+      document.getElementById("winner-mobile").style.display="none";
+      document.getElementById("winner").style.display="block";
+      setWinner(firstPlayer.username.toUpperCase()
+      )
+
+    }
+    else if (score2  == 2){
+      new Audio(cheers).play()
+                .then(() => {
+              console.log('Someone won.');
+          })
+          .catch(error => {
+              console.error('Error playing audio:', error);
+          });
+      document.getElementById("badge").style.display="none";
+      document.getElementById("game-div").style.display="none";
+      document.getElementById("outcome_mobile").style.display="none";
+      document.getElementById("checkwinner").style.display="none";
+      document.getElementById("winner-mobile").style.display="none";
+      document.getElementById("winner").style.display="block";
+      setWinner(secondPlayer.username.toUpperCase())
+  }
+  }, [score1, score2, firstPlayer, secondPlayer]);
   
 
     return(
@@ -262,6 +294,11 @@ export default function Single(){
       <a href="https://rock-paper-scissors-challenge-phi.vercel.app/"><button className="btn btn-dark p-2 m-3 loadBtn">SINGLE PLAYER MODE</button></a>
         <button className="btn btn-dark p-2 m-3 loadBtn" onClick={initializePlayers}>TWO PLAYERS MODE</button>
       </div>
+      </div>
+
+      <div id="winner">
+        <h1>{winner} WINS</h1>
+        <a href="">Play again</a>
       </div>
 
 </div>

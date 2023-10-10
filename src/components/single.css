@@ -291,7 +291,7 @@ body{
     color: aliceblue;
 }
 
-.badge,  .game-div, #checkwinner{
+.badge,  .game-div, #checkwinner, #winner{
     display: none;
 }
 
@@ -319,4 +319,19 @@ body{
 
 #checkwinner{
     margin: auto;
+}
+
+#winner{
+    background-image: url("https://m.media-amazon.com/images/I/41rya-JQFfL._AC_UF894,1000_QL80_.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    height: 100vh;
+    margin: 0;
+    border: 2px solid red;
+}
+
+#winner h1{
+    margin: 4%;
+    color: #fefefe;
 }
