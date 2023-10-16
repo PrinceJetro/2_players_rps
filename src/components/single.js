@@ -41,7 +41,7 @@ export default function Single(){
   // Function to initialize players
   const initializePlayers = () => {
     const username1 = prompt("Player 1, please enter your username:");
-    if(username1 ==  ""){
+    if(username1 ==  null){
       alert("Please enter a valid username");
       return;
     }
@@ -52,7 +52,7 @@ export default function Single(){
     alert("Please pass the phone to the seond player");
 
     const username2 = prompt("Player 2, please enter your username:");
-    if(username2 ==  ""){
+    if(username2 ==  null){
       alert("Please enter a valid username");
       return;
     }
