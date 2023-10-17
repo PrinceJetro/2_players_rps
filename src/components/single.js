@@ -13,19 +13,19 @@ import cheers from './cheers.mp3'
 export default function Single(){
 
   const [score1,setScore1] = useState(0);
+  const [check,setCheck] = useState(0);
   const  [winner, setWinner] = useState("")
   const [score2,setScore2] = useState(0);
   const [win,setWin] = useState("NO WINNER YET");
   const [firstPlayer, setFirstPlayer] = useState({
     username: 'P1',
-    id: null,
     choice: ''
   });
   const [secondPlayer, setSecondPlayer] = useState({
     username: 'P2',
-    id: null,
     choice: ''
   });
+  const [next,setNext] = useState(`${firstPlayer.username}'s turn`);
 
   // Function to redirect user if screen width > 450px
   const redirectToURLIfScreenWidthIsGreaterThan450 = () => {
@@ -45,9 +45,7 @@ export default function Single(){
       alert("Please enter a valid username");
       return;
     }
-    const id1 = Math.floor(Math.random() * 101);
-    setFirstPlayer({ username: username1, id: id1, choice: 'first' });
-    alert(`${username1}, your id is ${id1}`);
+    setFirstPlayer({ username: username1, choice: 'first' });
 
     alert("Please pass the phone to the seond player");
 
@@ -56,9 +54,7 @@ export default function Single(){
       alert("Please enter a valid username");
       return;
     }
-    const id2 = Math.floor(Math.random() * 101);
-    setSecondPlayer({ username: username2, id: id2, choice: 'second' });
-    alert(`${username2}, your id is ${id2}`);
+    setSecondPlayer({ username: username2, choice: 'second' });
     new Audio(songUrl).play()
         .then(() => {
       console.log('Audio started playing.');
@@ -69,7 +65,7 @@ export default function Single(){
 
     document.getElementById("badge").style.display="flex"
     document.getElementById("game-div").style.display="flex"
-    document.getElementById("checkwinner").style.display="flex"
+    document.getElementById("next").style.display="flex"
     document.getElementById("load").style.display="none"
 
   };
@@ -88,32 +84,44 @@ export default function Single(){
   useEffect(() => {
     console.log(secondPlayer);
   }, [secondPlayer]);
+
+  useEffect(() => {
+    console.log(check);
+  }, [check]);
+
+  useEffect(() => {
+    if (check == 2){
+      checkChoices();
+    }
+  }, [check]);
   
   // const images = document.querySelectorAll('.options');
   const handleImageClick = (event) => {
     const clickedImageId = event.target.id;
-    const id = prompt("Enter your ID:");
+    // const id = prompt("Enter your ID:");
 
-    if (id == firstPlayer.id) {
+    if (check == 0) {
       setFirstPlayer((prevState) => ({
         ...prevState,
         choice: clickedImageId,
       }));
-    } else if (id == secondPlayer.id) {
+      setCheck(1)
+      setNext(`${secondPlayer.username.toUpperCase()}'s turn`)
+    } else if (check == 1) {
       setSecondPlayer((prevState) => ({
         ...prevState,
         choice: clickedImageId,
       }));
-    } else {
-      alert("ID does not match that of Player 1 or Player 2");
-    }
+      setCheck(2)
+      setNext(`${firstPlayer.username.toUpperCase()}'s turn`)
+    } 
   };
     // Function to check if choices are equal
     const checkChoices = () => {
       document.getElementById("outcome_mobile").style.display="flex"
       document.getElementById("winner-mobile").style.display="flex"
       document.getElementById("game-div").style.display="none"
-      document.getElementById("checkwinner").style.display="none"
+      document.getElementById("next").style.display="none"
       if (firstPlayer.choice.toLowerCase() === 'rock' && secondPlayer.choice.toLowerCase() === 'scissors') {
         setWin(`${firstPlayer.username.toUpperCase()} Wins`);
         setScore1(score1+1)
@@ -167,13 +175,15 @@ export default function Single(){
         ...prevState,
         choice: "",
       }));
+      setCheck(0)
           };
 
     const again =() =>{
       document.getElementById("outcome_mobile").style.display="none"
       document.getElementById("winner-mobile").style.display="none"
       document.getElementById("game-div").style.display="flex"
-      document.getElementById("checkwinner").style.display="block"
+      document.getElementById("next").style.display="block"
+      setNext(`${firstPlayer.username.toUpperCase()}'s turn`)
     }
 
   useEffect(() => {
@@ -188,7 +198,7 @@ export default function Single(){
       document.getElementById("badge").style.display="none";
       document.getElementById("game-div").style.display="none";
       document.getElementById("outcome_mobile").style.display="none";
-      document.getElementById("checkwinner").style.display="none";
+      document.getElementById("next").style.display="none";
       document.getElementById("winner-mobile").style.display="none";
       document.getElementById("winner").style.display="block";
       setWinner(firstPlayer.username.toUpperCase()
@@ -233,7 +243,7 @@ export default function Single(){
 
  
  
-  <button onClick={checkChoices} className="btn btn-primary" id="checkwinner">Check Winner</button>
+  <h1 id="next">{next}</h1>
  
   <div className="game-div" id="game-div">
 
